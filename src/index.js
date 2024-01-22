@@ -30,9 +30,14 @@ app.get('/items', (req, res) => {
 // GET http://127.0.0.1:3000/items/<ID>
 app.get('/items/:id', (req, res) => {
   // TODO: palauta vain se objekti, jonka id vastaa pyydettyä
-  console.log('2', req.params.id);
-  const item = 'Item 2';
-  res.json(item);
+  const requstedId = parseInt(req.params.id);
+  const item = items.find((item) => item.id ===requstedId);
+
+  if (item) {
+    res.json(item);
+  } else {
+    res.status(404).json({message: 'Item not found'});
+  }
 });
 
 // Itemin lisäys
