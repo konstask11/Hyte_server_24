@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import { deleteItem, getItemById, getItems, postItem, putItem } from './items.mjs';
+import { getUserById, getUsers, postLogin, postUser, putUser } from './users.mjs';
 const hostname = '127.0.0.1';
 const port = 3000;
 const app = express();
@@ -31,6 +32,17 @@ app.put('/items/:id', putItem);
 //DELETE'
 app.delete('/items/:id', deleteItem);
 
+//users resource
+//lsit user
+app.get('/users', getUsers);
+//get into a user
+app.get('/users/:id', getUserById);
+//user registration
+app.post('/users', postUser);
+//user login
+app.post('users/login', postLogin);
+//update user
+app.put('/users/:id', putUser)
 
 
 // GET http://127.0.0.1:3000
