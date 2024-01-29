@@ -26,16 +26,45 @@ const getUsers = (req, res) => {
   };
 
 const getUserById = (req, res) => {
-    // todo: implement
+  const userId = Number(req.params.id);
+  const user = users.find(user => user.id === userId);
+  if (user) {
+      res.json(user);
+  } else {
+      res.status(404).json({ error: 'User not found' });
+  }
     };
 
-const postUser = (req, res) => {
-    // todo: implement
-    };
+    const postUser = (req, res) => {
+      const newUser = req.body;
+      if (!newUser.username || !newUser.password || !newUser.email) {
+          return res.status(400).json({ error: 'Invalid user data' });
+      }
+      // Check if username taken
+      if (users.some(user => user.username === newUser.username)) {
+          return res.status(409).json({ error: 'Username already taken' });
+      }
+      // new id for the user
+      const newUserId = users.length + 1;
+      const user = { id: newUserId, ...newUser };
+      users.push(user);
+      res.status(201).json(user);
+  };
 
 const putUser = (req, res) => {
-    // todo: implement
-    };
+  const userId = Number(req.params.id);
+  const updatedUser = req.body;
+  const existingUser = users.find(user => user.id === userId);
+  if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+  }
+
+  // Update user properties
+  existingUser.username = updatedUser.username || existingUser.username;
+  existingUser.password = updatedUser.password || existingUser.password;
+  existingUser.email = updatedUser.email || existingUser.email;
+  res.json(existingUser);
+};
 
 const postLogin = (req, res) => {
     // implement
