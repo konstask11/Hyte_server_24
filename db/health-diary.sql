@@ -26,6 +26,16 @@ CREATE TABLE DiaryEntries (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+-- Create a table for
+CREATE TABLE Moved_Hours (
+    HourID INT PRIMARY KEY,
+    user_id INT NOT NULL,
+    Duration INT, -- Duration in minutes
+    Sport VARCHAR(50),
+    MaxHR INT,
+    MinHR INT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
 
 -- INSERT users
 -- Iserting multiple user rows at once
@@ -39,18 +49,4 @@ INSERT INTO DiaryEntries (user_id, entry_date, mood, weight, sleep_hours, notes,
   (1, '2024-01-10', 'Happy', 70.5, 8, 'Had a great day, felt energetic', '2024-01-10 20:00:00'),
   (1, '2024-01-11', 'Tired', 70.2, 6, 'Long day at work, need rest', '2024-01-11 20:00:00'),
   (2, '2024-01-10', 'Stressed', 65.0, 7, 'Busy day, a bit stressed out', '2024-01-10 21:00:00');
-
--- Example queries
-SELECT username, entry_date, mood, notes
-    FROM Users, DiaryEntries
-    WHERE DiaryEntries.user_id = Users.user_id;
-
---same wtih join
-SELECT username, entry_date, mood, notes
-    FROM Users JOIN DiaryEntries
-    ON DiaryEntries.user_id = Users.user_id;
-
-SELECT entry_date, mood, sleep_hours FROM DiaryEntries
-    JOIN Users ON DiaryEntries.user_id = Users.user_id
-    WHERE username = 'johndoe';
 
