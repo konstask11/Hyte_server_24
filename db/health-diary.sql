@@ -28,8 +28,9 @@ CREATE TABLE DiaryEntries (
 
 -- Create a table for
 CREATE TABLE Moved_Hours (
-    HourID INT PRIMARY KEY,
+    HourID INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
+    Day DATE,
     Duration INT, -- Duration in minutes
     Sport VARCHAR(50),
     MaxHR INT,
@@ -50,3 +51,32 @@ INSERT INTO DiaryEntries (user_id, entry_date, mood, weight, sleep_hours, notes,
   (1, '2024-01-11', 'Tired', 70.2, 6, 'Long day at work, need rest', '2024-01-11 20:00:00'),
   (2, '2024-01-10', 'Stressed', 65.0, 7, 'Busy day, a bit stressed out', '2024-01-10 21:00:00');
 
+-- Esimerkki tietojen lisäämisestä
+INSERT INTO Moved_Hours (user_id, day, Duration, Sport, MaxHR, MinHR)
+VALUES (1, '2024-02-05', 60, 'Juoksu', 180, 90);
+
+INSERT INTO Moved_Hours (user_id, day, Duration, Sport, MaxHR, MinHR)
+VALUES (2, '2024-02-06', 45, 'Pyöräily', 160, 80);
+
+
+UPDATE Users SET user_level = 'admin' WHERE user_id = 1;
+
+DELETE FROM Moved_Hours
+WHERE HourID = 1;
+
+SELECT Users.username, Moved_Hours.Day, Moved_Hours.Duration, Moved_Hours.Sport
+FROM Users
+INNER JOIN Moved_Hours ON Users.user_id = Moved_Hours.user_id;
+
++--------------+       +----------------+      +--------------+
+|    Users     |       | DiaryEntries   |      | Moved_Hours  |
++--------------+       +----------------+      +--------------+
+| user_id (PK) |<------| entry_id (PK)  |<-----| HourID (PK)  |
+| username     |       | user_id (FK)   |      | user_id (FK) |
+| password     |       | entry_date     |      | Day          |
+| email        |       | mood           |      | Duration     |
+| created_at   |       | weight         |      | Sport        |
+| user_level   |       | sleep_hours    |      | MaxHR        |
++--------------+       | notes          |      | MinHR        |
+                       | created_at     |      +--------------+
+                       +----------------+
