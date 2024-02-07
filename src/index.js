@@ -2,15 +2,13 @@
 import express from 'express';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import { deleteItem, getItemById, getItems, postItem, putItem } from './items.mjs';
-import { getUserById, getUsers, postLogin, postUser, putUser } from './users.mjs';
+import itemRouter from './routes/item-router.mjs';
+import userRouter from './routes/user-router.mjs';
 const hostname = '127.0.0.1';
 const port = 3000;
 const app = express();
 
 app.use(express.json());
-
-
 // Staattinen sivusto palvelimen juureen (public-kansion sisältö näkyy osoitteessa http://127.0.0.1:3000/sivu.html)
 app.use(express.static('public'));
 const __filename = fileURLToPath(import.meta.url);
@@ -20,30 +18,10 @@ const __dirname = path.dirname(__filename);
 app.use('/sivusto', express.static(path.join(__dirname, '../public')));
 
 
-//RESOURCEE / item endpoint
-// GET http://127.0.0.1:3000/items
-app.get('/items', getItems);
-// GET http://127.0.0.1:3000/items/<ID>
-app.get('/items/:id', getItemById);
-// POST http://127.0.0.1:3000/items/
-app.post('/items', postItem);
-//PUT
-app.put('/items/:id', putItem);
-//DELETE'
-app.delete('/items/:id', deleteItem);
-
-//users resource
-//lsit user
-app.get('/users', getUsers);
-//get into a user
-app.get('/users/:id', getUserById);
-//user registration
-app.post('/users', postUser);
-//user login
-app.post('users/login', postLogin);
-//update user
-app.put('/users/:id', putUser)
-
+// RESOURCE /item endpoints
+app.use('/items', itemRouter);
+// Users resource
+app.use('/users', userRouter);
 
 // GET http://127.0.0.1:3000
 // ei toimi tällä hetkellä, koska public-server tarjoilee index.html:n ensin
