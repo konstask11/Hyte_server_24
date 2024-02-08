@@ -1,4 +1,4 @@
-import {insertUser, listAllUsers, selectUserById, updateUserById} from "../models/user-model.mjs";
+import {deleteUserById, insertUser, listAllUsers, selectUserById, updateUserById} from "../models/user-model.mjs";
 
 // TODO: implement route handlers below for users (real data)
 
@@ -47,8 +47,11 @@ const putUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  // TODO: implement this
-  res.send('not working yet');
+  const result = await deleteUserById(req.params.id);
+  if (result.error) {
+    return res.status(result.error).json(result);
+  }
+  return res.json(result);
 };
 
 // Dummy login with mock data, returns user object if username & password match

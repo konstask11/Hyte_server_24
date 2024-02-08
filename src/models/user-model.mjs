@@ -62,7 +62,20 @@ const selectUserById = async (id) => {
   };
 
   const deleteUserById = async (id) => {
+    try {
+        const sql = 'DELETE FROM  Users WHERE user_id=?';
+        const params = [id];
+        const [result] = await promisePool.query(sql, params);
+      //console.log(result);
+      if (result.affectedRows === 0) {
+        return {error: 404, message: 'user not found'};
+      }
 
+        return {message: 'user deleted', user_id: Id};
+      } catch (error) {
+        console.error('updateUserById', error);
+        return {error: 500, message: 'db error'};
+      }
   };
 
 export {listAllUsers, selectUserById, insertUser, updateUserById, deleteUserById};
