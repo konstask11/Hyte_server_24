@@ -1,47 +1,57 @@
-const users = [
-  {
-    id: 1,
-    username: "johndoe",
-    password: "password1",
-    email: "johndoe@example.com"
-  },
-  {
-    id: 2,
-    username: "janedoe",
-    password: "password2",
-    email: "janedoe@example.com"
-  },
-  {
-    id: 3,
-    username: "bobsmith",
-    password: "password3",
-    email: "bobsmith@example.com"
-  }
-];
+import {insertUser, listAllUsers, selectUserById, updateUserById} from "../models/user-model.mjs";
 
-// TODO: use usermodel (db) instead of mock data
 // TODO: implement route handlers below for users (real data)
 
-const getUsers = (req, res) => {
-  res.json(users);
+const getUsers = async (req, res) => {
+  const result = await listAllUsers();
+  if (result.error) {
+    return res.status(result.error).json(result);
+  }
+  return res.json(result);
 };
 
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
+  const result = await selectUserById(req.params.id);
+  if (result.error) {
+    return res.status(result.error).json(result);
+  }
+  return res.json(result);
+};
+
+const postUser = async (req, res) => {
+  const {username, password, email} = req.body;
+  if (username && password && email) {
+  const result = await insertUser(req.body);
+  if (result.error) {
+    return res.status(result.error).json(result);
+  }
+  return res.status(201).json(result);
+ } else {
+  return res.status(400).json({error: 400, message: 'bad request'});
+ }
+};
+
+const putUser = async (req, res) => {
+  const user_id = req.params.id;
+  const {username, password, email} = req.body;
+  if (user_id && username && password && email) {
+    const result = await updateUserById(user_id, ...req.body);
+    if (result.error) {
+      return res.status(result.error).json(result);
+    }
+    return res.status(201).json(result);
+   } else {
+    return res.status(400).json({error: 400, message: 'bad request'});
+   }
+
+};
+
+const deleteUser = async (req, res) => {
   // TODO: implement this
   res.send('not working yet');
 };
 
-const postUser = (req, res) => {
-  // TODO: implement this
-  res.send('not working yet');
-};
-
-const putUser = (req, res) => {
-  // TODO: implement this
-  res.send('not working yet');
-};
-
-// Dummy login, returns user object if username & password match
+// Dummy login with mock data, returns user object if username & password match
 const postLogin = (req, res) => {
   const userCreds = req.body;
   if (!userCreds.username || !userCreds.password) {
@@ -60,4 +70,4 @@ const postLogin = (req, res) => {
   }
 };
 
-export {getUsers, getUserById, postUser, putUser, postLogin};
+export {getUsers, getUserById, postUser, putUser, postLogin, deleteUser};
