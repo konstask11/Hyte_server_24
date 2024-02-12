@@ -19,7 +19,7 @@ class EntryModel {
         if (error) {
           reject(error);
         } else {
-          resolve(results[0]); // Assuming there should be only one entry with the given ID
+          resolve(results[0]);
         }
       });
     });
@@ -50,4 +50,4 @@ class EntryModel {
   }
 }
 
-module.exports = EntryModel;
+export default EntryModel;
