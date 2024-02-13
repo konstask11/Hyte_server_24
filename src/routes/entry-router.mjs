@@ -1,10 +1,19 @@
-import { Router } from 'express';
-const router = Router();
-import { getAllEntries, getEntryById, updateEntryById, deleteEntryById } from '../controllers/entry-controller.mjs';
+import express from 'express';
+import {
+  getEntries,
+  getEntryById,
+  postEntry,
+  putEntry,
+  deleteEntry,
+} from '../controllers/entry-controller.mjs';
 
-router.get('/', getAllEntries);
-router.get('/:id', getEntryById);
-router.put('/:id', updateEntryById);
-router.delete('/:id', deleteEntryById);
+const entryRouter = express.Router();
 
-export default router;
+entryRouter.route('/').get(getEntries).post(postEntry);
+
+entryRouter.route('/:id')
+  .get(getEntryById)
+  .put(putEntry)
+  .delete(deleteEntry);
+
+export default entryRouter;
