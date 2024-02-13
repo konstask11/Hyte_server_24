@@ -4,7 +4,7 @@ import {
   getEntryById,
   postEntry,
   putEntry,
-  deleteEntry,
+  deleteEntryById,
 } from '../controllers/entry-controller.mjs';
 
 const entryRouter = express.Router();
