@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import {
   deleteUserById,
   insertUser,
@@ -39,7 +40,11 @@ const postUser = async (req, res) => {
 
 const putUser = async (req, res) => {
   const user_id = req.params.id;
+  const userId = req.user.user_id;
   const {username, password, email} = req.body;
+  // hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
   // check that all needed fields are included in request
   if (user_id && username && password && email) {
     const result = await updateUserById({user_id, ...req.body});
