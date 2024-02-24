@@ -1,10 +1,12 @@
 {
-  "name": "hyte_server_24",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "REST API server",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
   },
   "author": "konstask11",
   "license": "ISC",
@@ -14,6 +16,15 @@
     "nodemon": "^3.0.3"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Hyte_main_24"
   }
 }
