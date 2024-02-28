@@ -1,4 +1,5 @@
 import express from 'express';
+import {body} from 'express-validator';
 import {authenticateToken} from '../middlewares/authentication.mjs'
 
 import {
@@ -18,7 +19,11 @@ userRouter.route('/')
    // update user
   .put(authenticateToken, putUser)
   // user registration
-  .post(postUser);
+  .post(
+  body('username').trim().isLength({min: 3, max: 20}), 
+  body('password').trim().isLength({min: 8, max: 128}), 
+  body('email').trim(),
+  postUser);
 
 // /user/:id endpoint
 userRouter.route('/:id')
