@@ -31,7 +31,7 @@ const selectUserById = async (id) => {
   }
 };
 
-const insertUser = async (user) => {
+const insertUser = async (user, next) => {
   try {
     const sql = 'INSERT INTO Users (username, password, email) VALUES (?, ?, ?)';
     const params = [user.username, user.password, user.email];
@@ -41,7 +41,7 @@ const insertUser = async (user) => {
   } catch (error) {
     // now duplicate entry error is generic 500 error, should be fixed to 400 ?
     console.error('insertUser', error);
-    return {error: 500, message: 'db error'};
+    return next(new Error(err));
   }
 };
 
