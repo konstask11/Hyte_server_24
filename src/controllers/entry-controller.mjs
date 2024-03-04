@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import {validationResult} from 'express-validator';
 import {
   findEntryById,
   addEntry,
@@ -29,6 +30,16 @@ const getEntryById = async (req, res) => {
 };
 
 const postEntry = async (req, res) => {
+
+  const errors = validationResult(req);
+  // check if any validation errors
+  if (!errors.isEmpty()) {
+    console.log('postEntry errors', errors.array());
+    const error = new Error('Invalid or missing fields');
+    error.status = 400;
+    return next(error);
+  }
+
   const {entry_date, mood, weight, sleep_hours, notes} = req.body;
 
   if (entry_date && (weight || mood || sleep_hours || notes)) {
