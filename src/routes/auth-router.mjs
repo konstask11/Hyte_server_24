@@ -1,19 +1,11 @@
 import express from 'express';
-import {
-  getEntries,
-  getEntryById,
-  postEntry,
-  putEntry,
-  deleteEntry,
-} from '../controllers/entry-controller.mjs';
+import {getMe, postLogin} from '../controllers/auth-controller.mjs';
 import {authenticateToken} from '../middlewares/authentication.mjs';
 
-const entryRouter = express.Router();
+const authRouter = express.Router();
 
-entryRouter.route('/').get(authenticateToken, getEntries)
-// TODO: add authentication and input validation
-.post(postEntry);
+// user login
+authRouter.post('/login', postLogin)
+  .get('/me', authenticateToken, getMe);
 
-entryRouter.route('/:id').get(getEntryById).put(putEntry).delete(deleteEntry);
-
-export default entryRouter;
+export default authRouter;
