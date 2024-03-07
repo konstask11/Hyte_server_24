@@ -1,5 +1,6 @@
-/* eslint-disable camelcase */
+import { validationResult } from 'express-validator';
 import {
+  listAllEntries,
   findEntryById,
   addEntry,
   deleteEntryById,
@@ -28,75 +29,71 @@ const getEntryById = async (req, res) => {
   }
 };
 
-const postEntry = async (req, res) => {
-  const {entry_date, mood, weight, sleep_hours, notes} = req.body;
+const postEntry = async (req, res, next) => {
+  const errors = validationResult(req);
 
-  if (entry_date && (weight || mood || sleep_hours || notes)) {
-    try {
-      // Get user_id from the token
-      const userIdFromToken = req.user.user_id;
-
-      // Create the new diary entry with the user_id from the token..
-      const newEntry = {
-        user_id: userIdFromToken,
-        entry_date,
-        mood,
-        weight,
-        sleep_hours,
-        notes,
-      };
-
-      // post the new diary
-      const result = await addEntry(newEntry);
-      if (result.entry_id) {
-        return res.status(201).json({message: 'New entry added.', ...result});
-      } else {
-        return res.status(500).json(result);
-      }
-    } catch (error) {
-      console.error('Error adding new entry:', error);
-      return res.status(500).json({error: 'Internal server error'});
-    }
-  } else {
-    return res.status(400).json({error: 400, message: 'Bad request'});
+  // check if any validation errors
+  if (!errors.isEmpty()) {
+    console.log('postEntry errors', errors.array());
+    const error = new Error('Invalid input');
+    error.status = 400;
+    error.errors = validationErrors.errors;
+    return next(error);
   }
-};
+
+  // get fields from request body
+  const { entry_date, mood, weight, sleep_hours, notes } = req.body;
+  // req.user is added by authenticateToken middleware
+  const user_id = req.user.user_id;
+  // combine fields into a new entry object
+  const newEntry = { user_id, entry_date, mood, weight, sleep_hours, notes };
+  const result = await addEntry(newEntry);
+
+  if (result.error) {
+    const error = new Error(result.error);
+    error.status = 400;
+    return next(error);
+  }
+
+  res.status(201).json({ message: 'New entry added.', ...result });
+}
 
 
-const putEntry = async (req, res) => {
+const putEntry = async (req, res, next) => {
   const entry_id = req.params.id;
-  // eslint-disable-next-line camelcase
-  const {entry_date, mood, weight, sleep_hours, notes} = req.body;
+  // Check if any validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+  }
+
+  if (entry_id) {
+      try {
+          // get user_id
+          const userIdFromToken = req.user.user_id;
 
 
-  // eslint-disable-next-line camelcase
-  if ((entry_date || weight || mood || sleep_hours || notes) && entry_id) {
-    try {
-      // get user_id
-      const userIdFromToken = req.user.user_id;
+          const entry = await findEntryById(entry_id);
+          if (!entry) {
+              return res.status(404).json({ error: 'Entry not found' });
+          }
+          // Check if the user ID from token matches the user ID
+          if (entry.user_id !== userIdFromToken) {
+              return res.status(403).json({ error: 'Unauthorized' });
+          }
 
-      // Check if the user ID from token matches the user ID
-      const entry = await findEntryById(entry_id);
-      if (!entry) {
-        return res.status(404).json({error: 'Entry not found'});
+          // If the user is authorized --> update entry
+          const result = await updateEntryById({ entry_id, ...req.body });
+          return res.status(200).json(result);
+      } catch (error) {
+          console.error('Error updating entry:', error);
+          return res.status(500).json({ error: 'Internal server error' });
       }
-
-      if (entry.user_id !== userIdFromToken) {
-        return res.status(403).json({error: 'Unauthorized'});
-      }
-
-      // If the user is authorized --> update entry
-      // eslint-disable-next-line camelcase
-      const result = await updateEntryById({entry_id, ...req.body});
-      return res.status(201).json(result);
-    } catch (error) {
-      console.error('Error updating entry:', error);
-      return res.status(500).json({error: 'Internal server error'});
-    }
   } else {
-    return res.status(400).json({error: 400, message: 'Bad request'});
+      return res.status(400).json({ error: 400, message: 'Bad request' });
   }
 };
+
 
 const deleteEntry = async (req, res) => {
   const entryId = req.params.id;
@@ -108,11 +105,11 @@ const deleteEntry = async (req, res) => {
     // Checks that the user has rights to delete
     const entry = await findEntryById(entryId);
     if (!entry) {
-      return res.status(404).json({error: 'Entry not found'});
+      return res.status(404).json({ error: 'Entry not found' });
     }
 
     if (entry.user_id !== userIdFromToken) {
-      return res.status(403).json({error: 'Unauthorized'});
+      return res.status(403).json({ error: 'Unauthorized' });
     }
 
     // If the authorized --> delete
@@ -123,9 +120,15 @@ const deleteEntry = async (req, res) => {
     return res.json(result);
   } catch (error) {
     console.error('Error deleting entry:', error);
-    return res.status(500).json({error: 'Internal server error'});
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+
+
+
+
 
 
 export {getEntries, getEntryById, postEntry, putEntry, deleteEntry};
