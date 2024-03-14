@@ -40,7 +40,7 @@ CREATE TABLE Exercises (
 );
 
 -- Create a table for tracking food consumption
-CREATE TABLE FoodConsumption (
+CREATE TABLE FoodDiary (
     consumption_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     consumption_date DATE NOT NULL,
@@ -54,6 +54,14 @@ CREATE TABLE FoodConsumption (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+CREATE TABLE CaffeineCounter (
+    entry_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    Drink VARCHAR(100) NOT NULL,
+    caf_dose_mg DECIMAL(5,2),
+    dose_dl DECIMAL(5,2),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
 
 
 -- Inserting multiple user rows at once
@@ -68,6 +76,10 @@ INSERT INTO DiaryEntries (user_id, entry_date, mood, weight, sleep_hours, notes,
   (1, '2024-01-10', 'Happy', 70.5, 8, 'Had a great day, felt energetic', '2024-01-10 20:00:00'),
   (1, '2024-01-11', 'Tired', 70.2, 6, 'Long day at work, need rest', '2024-01-11 20:00:00'),
   (2, '2024-01-10', 'Stressed', 65.0, 7, 'Busy day, a bit stressed out', '2023-01-10 21:00:00'),
+  (4, '2024-03-07', 'Stressed', 124.5, 8, 'Busy day, a bit stressed out', '2024-03-07 21:00:00'),
+  (6, '2024-01-10', 'Happy', 70.5, 8, 'Had a great day, felt energetic', '2024-01-10 20:00:00'),
+  (5, '2024-01-11', 'Tired', 70.2, 6, 'Long day at work, need rest', '2024-01-11 20:00:00'),
+  (6, '2024-01-10', 'Stressed', 65.0, 7, 'Busy day, a bit stressed out', '2023-01-10 21:00:00'),
   (5, '2024-03-07', 'Stressed', 124.5, 8, 'Busy day, a bit stressed out', '2024-03-07 21:00:00');
 
 -- Inserting multiple exercise entries
@@ -75,11 +87,25 @@ INSERT INTO Exercises (user_id, exercise_date, exercise_type, duration_minutes, 
   (1, '2024-01-10', 'Running', 30, 300, 'Morning jog', '2024-01-10 12:00:00'),
   (1, '2024-01-11', 'Weightlifting', 45, 200, 'Strength training', '2024-01-11 15:30:00'),
   (2, '2024-01-10', 'Yoga', 60, 150, 'Relaxing session', '2023-01-10 18:00:00'),
-  (5, '2024-03-06', 'disc golf', 120, 600, 'one round of disc golf', '2023-10-12 15:30:00');
+  (4, '2024-03-06', 'disc golf', 120, 600, 'one round of disc golf', '2023-10-12 15:30:00'),
+  (5, '2024-01-10', 'Running', 30, 300, 'Morning jog', '2024-01-10 12:00:00'),
+  (5, '2024-01-11', 'Weightlifting', 45, 200, 'Strength training', '2024-01-11 15:30:00'),
+  (6, '2024-01-10', 'Yoga', 60, 150, 'Relaxing session', '2023-01-10 18:00:00'),
+  (6, '2024-03-06', 'disc golf', 120, 600, 'one round of disc golf', '2023-10-12 15:30:00');
 
 -- Inserting multiple food consumption entries
-INSERT INTO FoodConsumption (user_id, consumption_date, food_name, calories, protein_g, carbohydrates_g, fat_g, notes, created_at) VALUES
+INSERT INTO FoodDiary (user_id, consumption_date, food_name, calories, protein_g, carbohydrates_g, fat_g, notes, created_at) VALUES
   (1, '2024-01-10', 'Salmon and potatoes', 450, 30.0, 20.0, 15.0, 'Healthy dinner', '2024-01-10 19:00:00'),
   (1, '2024-01-11', 'steak with fries', 750, 40.5, 30.0, 25.0, 'Heavy lunch option', '2024-01-11 12:30:00'),
   (2, '2024-01-10', 'noodle soup', 400, 15.0, 25.0, 10.0, 'Delicious and semi light ', '2024-01-10 20:00:00'),
-  (5, '2024-03-07', 'pasta', 400, 20.0, 35.0, 15.0, 'Healthy dinner ', '2024-03-07 12:00:00');
+  (4, '2024-03-07', 'pasta', 400, 20.0, 35.0, 15.0, 'Healthy dinner ', '2024-03-07 12:00:00'),
+  (5, '2024-01-10', 'Salmon and potatoes', 450, 30.0, 20.0, 15.0, 'Healthy dinner', '2024-01-10 19:00:00'),
+  (5, '2024-01-11', 'steak with fries', 750, 40.5, 30.0, 25.0, 'Heavy lunch option', '2024-01-11 12:30:00'),
+  (6, '2024-01-10', 'noodle soup', 400, 15.0, 25.0, 10.0, 'Delicious and semi light ', '2024-01-10 20:00:00'),
+  (6, '2024-03-07', 'pasta', 400, 20.0, 35.0, 15.0, 'Healthy dinner ', '2024-03-07 12:00:00');
+
+-- Inserting multiple food consumption entries
+INSERT INTO CaffeineCounter (user_id, drink, caf_dose_mg, dose_dl) VALUES
+  (1, 'coffee', 150, 3),
+  (4, 'energy drink', 180, 3.3);
+
