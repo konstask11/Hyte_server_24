@@ -37,7 +37,7 @@ const postEntry = async (req, res, next) => {
     console.log('postEntry errors', errors.array());
     const error = new Error('Invalid input');
     error.status = 400;
-    error.errors = validationErrors.errors;
+    error.errors = errors.errors;
     return next(error);
   }
 
