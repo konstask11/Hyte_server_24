@@ -1,12 +1,26 @@
 # Hyte_server_24
- 
+link to app
+https://hyte-server-vichy.northeurope.cloudapp.azure.com/
+
+Photo from login page:
+![Näyttökuva 2024-03-19 135003](https://github.com/konstask11/Hyte_server_24/assets/111982386/81d62cf9-1f8d-4bcb-91f1-be34debd3a7c)
+
+
+Photo from home page:
+![Näyttökuva 2024-03-19 135109](https://github.com/konstask11/Hyte_server_24/assets/111982386/e9fac880-fa14-46c5-880a-bb546a092773)
+
+## the functionality of the application:
+- creating a account
+- logging
+- switch username/password/email address
+- making & seeing diary entries
+- delete diary entries
+- delete account
+
 
 node.js + Express
 
-start dev server: 'npm run dev'
-
-Kysy matilta "getuserByid ja putuser" tarviiko merkkijono muutta numeroksi? = const userId = Number(req.params.id);
-
+start dev server: 'npm run dev'/'npm start'
 
 
  // tietokanta kysely perusteet
