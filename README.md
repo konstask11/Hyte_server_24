@@ -1,12 +1,28 @@
 # Hyte_server_24
- 
+link to app
+https://hyte-server-vichy.northeurope.cloudapp.azure.com/
+
+Photo from login page:
+![Näyttökuva 2024-03-19 135003](https://github.com/konstask11/Hyte_server_24/assets/111982386/81d62cf9-1f8d-4bcb-91f1-be34debd3a7c)
+
+
+Photo from home page:
+![Näyttökuva 2024-03-19 135109](https://github.com/konstask11/Hyte_server_24/assets/111982386/e9fac880-fa14-46c5-880a-bb546a092773)
+
+## the functionality of the application:
+- creating a account
+ - password requires 8 characters & it needs to include letters and numbers
+ - email must be unique
+- logging
+- switch username/password/email address
+- making & seeing diary entries
+- delete diary entries
+- delete account
+
 
 node.js + Express
 
-start dev server: 'npm run dev'
-
-Kysy matilta "getuserByid ja putuser" tarviiko merkkijono muutta numeroksi? = const userId = Number(req.params.id);
-
+start dev server: 'npm run dev'/'npm start'
 
 
  // tietokanta kysely perusteet
@@ -79,10 +95,10 @@ POST http://localhost:3000/api/entries
 content-type: application/json
 
 {
-  "entry_date": "2024-02-12",
+  "entry_date": "2024-03-12",
   "mood": "Happy",
-  "weight": 69.6,
-  "sleep_hours": 7,
+  "weight": 123.5,
+  "sleep_hours": 4,
   "notes": "This was a good day"
 
 }
@@ -92,12 +108,12 @@ PUT http://localhost:3000/api/entries/:id
 content-type: application/json
 
 {
-  "entry_date": "2024-02-12",
+  "entry_date": "2024-03-12",
   "mood": "Even more happy now",
-  "weight": 69.6,
-  "sleep_hours": 7,
+  "weight": 123.5,
+  "sleep_hours": 5,
   "notes": "This was a good day",
-  "user_id": 3
+  "user_id": 2
 }
 
 # Delete entry ( requires token / user cna only delete his own entries.)
